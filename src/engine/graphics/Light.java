@@ -1,30 +1,30 @@
 package engine.graphics;
 
-import engine.math.Vector3Df;
+import engine.math.Vector3f;
 
 public class Light {
 
-    private Vector3Df position;
-    private Vector3Df colour;
+    private Vector3f position;
+    private Vector3f colour;
 
-    public Light(Vector3Df position, Vector3Df colour) {
+    public Light(Vector3f position, Vector3f colour) {
 	this.position = position;
 	this.colour = colour;
     }
 
-    public Vector3Df getPosition() {
+    public Vector3f getPosition() {
 	return position;
     }
 
-    public void setPosition(Vector3Df position) {
+    public void setPosition(Vector3f position) {
 	this.position = position;
     }
 
-    public Vector3Df getColour() {
+    public Vector3f getColour() {
 	return colour;
     }
 
-    public void setColour(Vector3Df colour) {
+    public void setColour(Vector3f colour) {
 	this.colour = colour;
     }
 

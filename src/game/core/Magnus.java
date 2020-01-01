@@ -1,7 +1,7 @@
 package game.core;
 
 import engine.graphics.Entity;
-import engine.math.Vector3Df;
+import engine.math.Vector3f;
 
 public class Magnus extends Player {
 
@@ -9,7 +9,7 @@ public class Magnus extends Player {
 	meshName = "knight";
     }
 
-    public Magnus(Vector3Df position, Vector3Df rotation) {
+    public Magnus(Vector3f position, Vector3f rotation) {
 
 	super(position, rotation);
     }

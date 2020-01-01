@@ -1,7 +1,7 @@
 package game.core;
 
 import engine.graphics.Entity;
-import engine.math.Vector3Df;
+import engine.math.Vector3f;
 
 public class Character {
 
@@ -11,7 +11,7 @@ public class Character {
     protected int maxHealth;
     protected int health;
     protected int attack;
-    protected int moveSpeed;
+    protected float moveSpeed = 0.5f;
     protected int defense;
     protected boolean isInvincible;
     protected int attackCd;
@@ -20,7 +20,7 @@ public class Character {
 
     protected Weapon currentWeapon;
 
-    public Character(Vector3Df position, Vector3Df rotation) {
+    public Character(Vector3f position, Vector3f rotation) {
 	entity = new Entity(meshName, position, rotation, 1);
     }
 
@@ -48,7 +48,7 @@ public class Character {
 	this.attack = attack;
     }
 
-    public int getMoveSpeed() {
+    public float getMoveSpeed() {
 	return moveSpeed;
     }
 

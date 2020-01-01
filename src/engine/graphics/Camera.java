@@ -1,10 +1,10 @@
 package engine.graphics;
 
-import engine.math.Vector3Df;
+import engine.math.Vector3f;
 
 public class Camera {
 
-    private Vector3Df position = new Vector3Df(0, 0, 0);
+    private Vector3f position = new Vector3f(0, 0, 0);
     private float pitch;
     private float yaw;
     private float roll;
@@ -12,15 +12,15 @@ public class Camera {
     public Camera() {
     }
 
-    public void move() {
-	/*
-	 * if(Keyboard.isKeyDown(Keyboard.KEY_W)){ position.z-=0.02f; }
-	 * if(Keyboard.isKeyDown(Keyboard.KEY_D)){ position.x+=0.02f; }
-	 * if(Keyboard.isKeyDown(Keyboard.KEY_A)){ position.x-=0.02f; }
-	 */
+    public void move(Vector3f pos1, Vector3f pos2) {
+	
+	float distance = (pos1.x + pos2.x) / 2.0f;
+	
+	position.z = 20 + Math.abs(pos1.x - pos2.x);
+	position.x = distance;
     }
 
-    public Vector3Df getPosition() {
+    public Vector3f getPosition() {
 	return position;
     }
 
@@ -36,8 +36,27 @@ public class Camera {
 	return roll;
     }
 
-    public void setPosition(Vector3Df position) {
+    public void setPosition(Vector3f position) {
 	this.position = position;
     }
 
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+
+    public void setRoll(float roll) {
+        this.roll = roll;
+    }
+
+    public void Translate(float dx, float dy, float dz) {
+	this.position.x += dx;
+	this.position.y += dy;
+	this.position.z += dz;
+    }
+    
+    
 }

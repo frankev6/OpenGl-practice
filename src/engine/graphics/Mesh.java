@@ -5,15 +5,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import engine.math.Point3Df;
-import engine.math.Vector3Df;
+import engine.math.Point3f;
+import engine.math.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class Mesh {
-    private ArrayList<Point3Df> vertex;
+    private ArrayList<Point3f> vertex;
     private ArrayList<Float[]> texCoords;
-    private ArrayList<Vector3Df> normals;
+    private ArrayList<Vector3f> normals;
 
     private ArrayList<Face> faces; // indices into the vertices array list
 
@@ -40,9 +40,9 @@ public class Mesh {
 	    for (int j = 0; j < faces.get(i).getSize(); j++) {
 		Float[] tex = texCoords.get(faces.get(i).getTextureIndex(j) - 1);
 		glTexCoord2f(tex[0], tex[1]);
-		Point3Df p = vertex.get(faces.get(i).getVertexIndex(j) - 1);
+		Point3f p = vertex.get(faces.get(i).getVertexIndex(j) - 1);
 		glVertex3f(p.getX(), p.getY(), p.getZ());
-		Vector3Df v = normals.get(faces.get(i).getNormalIndex(j) - 1);
+		Vector3f v = normals.get(faces.get(i).getNormalIndex(j) - 1);
 		glNormal3f(v.getX(), v.getY(), v.getZ());
 	    }
 	    glEnd();
@@ -57,7 +57,7 @@ public class Mesh {
 		String line = scan.nextLine();
 		String[] lineArray = line.split(" ");
 		if (lineArray[0].equals("v")) {
-		    Point3Df point = new Point3Df(Float.parseFloat(lineArray[1]), Float.parseFloat(lineArray[2]),
+		    Point3f point = new Point3f(Float.parseFloat(lineArray[1]), Float.parseFloat(lineArray[2]),
 			    Float.parseFloat(lineArray[3]));
 		    vertex.add(point);
 		} else if (lineArray[0].equals("vt")) {
@@ -66,7 +66,7 @@ public class Mesh {
 		    f[1] = Float.parseFloat(lineArray[2]);
 		    texCoords.add(f);
 		} else if (lineArray[0].equals("vn")) {
-		    Vector3Df vector = new Vector3Df(Float.parseFloat(lineArray[1]), Float.parseFloat(lineArray[2]),
+		    Vector3f vector = new Vector3f(Float.parseFloat(lineArray[1]), Float.parseFloat(lineArray[2]),
 			    Float.parseFloat(lineArray[3]));
 		    normals.add(vector);
 		} else if (lineArray[0].equals("f")) {
@@ -100,4 +100,13 @@ public class Mesh {
 	    e.printStackTrace();
 	}
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+    
 }

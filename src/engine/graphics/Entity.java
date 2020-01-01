@@ -1,18 +1,18 @@
 package engine.graphics;
 
-import engine.math.Vector3Df;
+import engine.math.Vector3f;
 
 public class Entity {
 
     private Mesh mesh;
-    private Vector3Df position;
-    private Vector3Df rotation;
+    private Vector3f position;
+    private Vector3f rotation;
     
     private float scale;
 
     private boolean isVisible = true;
 
-    public Entity(String meshName, Vector3Df position, Vector3Df rotation, float scale) {
+    public Entity(String meshName, Vector3f position, Vector3f rotation, float scale) {
 	this.mesh = new Mesh("Assets/Models/" + meshName + ".obj");
 	this.position = position;
 	this.rotation = rotation;
@@ -23,7 +23,7 @@ public class Entity {
 	return mesh;
     }
 
-    public Vector3Df getPosition() {
+    public Vector3f getPosition() {
 	return position;
     }
 
@@ -35,7 +35,7 @@ public class Entity {
 	this.mesh = model;
     }
 
-    public void setPosition(Vector3Df position) {
+    public void setPosition(Vector3f position) {
 	this.position = position;
     }
 
@@ -49,11 +49,11 @@ public class Entity {
 	this.position.z += dz;
     }
 
-    public void setRotation(Vector3Df rotation) {
+    public void setRotation(Vector3f rotation) {
 	this.rotation = rotation;
     }
 
-    public Vector3Df getRotation() {
+    public Vector3f getRotation() {
 	return this.rotation;
     }
 
