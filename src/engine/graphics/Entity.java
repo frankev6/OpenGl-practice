@@ -4,6 +4,7 @@ import engine.math.Vector3f;
 
 public class Entity {
 
+    private Scene scene;
     private Mesh mesh;
     private Vector3f position;
     private Vector3f rotation;
@@ -12,8 +13,9 @@ public class Entity {
 
     private boolean isVisible = true;
 
-    public Entity(String meshName, Vector3f position, Vector3f rotation, float scale) {
+    public Entity(Scene scene, String meshName, Vector3f position, Vector3f rotation, float scale) {
 	this.mesh = new Mesh("Assets/Models/" + meshName + ".obj");
+	this.scene = scene;
 	this.position = position;
 	this.rotation = rotation;
 	this.scale = scale;
@@ -73,6 +75,10 @@ public class Entity {
 
     public boolean getVisibility() {
 	return this.isVisible;
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 
 }

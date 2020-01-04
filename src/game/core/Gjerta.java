@@ -1,5 +1,6 @@
 package game.core;
 
+import engine.graphics.Scene;
 import engine.math.Vector3f;
 
 public class Gjerta extends Player{
@@ -8,8 +9,8 @@ public class Gjerta extends Player{
 	meshName = "knight";
     }
     
-    public Gjerta(Vector3f position, Vector3f rotation) {
-	super(position, rotation);
+    public Gjerta(Scene scene, Vector3f position, Vector3f rotation) {
+	super(scene,position, rotation);
 	
     }
 

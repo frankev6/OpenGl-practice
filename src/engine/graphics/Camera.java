@@ -8,6 +8,7 @@ public class Camera {
     private float pitch;
     private float yaw;
     private float roll;
+    private float minDistance = 60;
 
     public Camera() {
     }
@@ -16,7 +17,7 @@ public class Camera {
 	
 	float distance = (pos1.x + pos2.x) / 2.0f;
 	
-	position.z = 20 + Math.abs(pos1.x - pos2.x);
+	position.z = minDistance+Math.abs(pos1.x - pos2.x);
 	position.x = distance;
     }
 

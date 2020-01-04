@@ -1,77 +1,84 @@
 package game.core;
 
+import engine.graphics.Scene;
 import engine.math.Vector3f;
 
-public class Player extends Character{
-    
-    
+public class Player extends Character {
 
-    protected String LEFT_KEY;
-    protected String RIGHT_KEY;
-    protected String UP_KEY;
-    protected String DOWN_KEY;
-    
+    public enum LookDirection {
+	up(180), down(0), left(-90), right(90);
+
+	private int numVal;
+
+	LookDirection(int numVal) {
+	    this.numVal = numVal;
+	}
+
+	public int getNumVal() {
+	    return numVal;
+	}
+    }
+
+    protected LookDirection lookDirection;
     protected int maxExperience = 100;
     protected int experience;
 
     private Vector3f respawnPoint;
-    
-    public Player(Vector3f position, Vector3f rotation) {
-	super(position, rotation);
-    }
-    
-    protected void LevelUp() {
-	level++;
-	maxExperience *= level/4;
-	experience = 0;
-	maxHealth = 90+(level * 10);
-	health += (level*10);
-    }
-    
-   
 
-    public void AddExperience(int experience) {
-	experience+= experience;
-	if(experience >= maxExperience) {
-	    LevelUp();
+    public Player(Scene scene, Vector3f position, Vector3f rotation) {
+	super(scene, position, rotation);
+	lookDirection = LookDirection.right;
+    }
+
+    protected void levelUp() {
+	level++;
+	maxExperience *= level / 4;
+	experience = 0;
+	maxHealth = 90 + (level * 10);
+	health += (level * 10);
+    }
+
+    public void addExperience(int experience) {
+	experience += experience;
+	if (experience >= maxExperience) {
+	    levelUp();
 	}
     }
-    
+
     public void DropWeapon() {
-	//instantiate an entity of that weapon in the world, that you could pick back up
+	// instantiate an entity of that weapon in the world, that you could pick back
+	// up
     }
 
-    public String getLEFT_KEY() {
-        return LEFT_KEY;
+    public void Attack() {
+
     }
 
-    public void setLEFT_KEY(String lEFT_KEY) {
-        LEFT_KEY = lEFT_KEY;
+    public void Look(LookDirection direction) {
+	lookDirection = direction;
+	this.getEntity().setRotation(new Vector3f(0, lookDirection.getNumVal(), 0));
     }
 
-    public String getRIGHT_KEY() {
-        return RIGHT_KEY;
+    public void Move() {
+
+	
+	if (lookDirection.equals(LookDirection.up)) {
+	    getEntity().Translate(0, 0, -getMoveSpeed());
+	    return;
+	}
+	if (lookDirection.equals(LookDirection.down)) {
+	    getEntity().Translate(0, 0, getMoveSpeed());
+	    return;
+	}
+	if (lookDirection.equals(LookDirection.left)) {
+	    getEntity().Translate(-getMoveSpeed(), 0, 0);
+	    return;
+	}
+	if (lookDirection.equals(LookDirection.right)) {
+	    getEntity().Translate(getMoveSpeed(), 0, 0);
+	    return;
+	}
+	updateCollider();
     }
 
-    public void setRIGHT_KEY(String rIGHT_KEY) {
-        RIGHT_KEY = rIGHT_KEY;
-    }
-
-    public String getUP_KEY() {
-        return UP_KEY;
-    }
-
-    public void setUP_KEY(String uP_KEY) {
-        UP_KEY = uP_KEY;
-    }
-
-    public String getDOWN_KEY() {
-        return DOWN_KEY;
-    }
-
-    public void setDOWN_KEY(String dOWN_KEY) {
-        DOWN_KEY = dOWN_KEY;
-    }
-    
-    
 }
