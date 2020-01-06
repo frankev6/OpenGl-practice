@@ -2,31 +2,17 @@ package game.core;
 
 import engine.graphics.Scene;
 import engine.math.Vector3f;
+import engine.physics.CircleCollider;
 
 public class Player extends Character {
 
-    public enum LookDirection {
-	up(180), down(0), left(-90), right(90);
-
-	private int numVal;
-
-	LookDirection(int numVal) {
-	    this.numVal = numVal;
-	}
-
-	public int getNumVal() {
-	    return numVal;
-	}
-    }
-
-    protected LookDirection lookDirection;
     protected int maxExperience = 100;
     protected int experience;
 
     private Vector3f respawnPoint;
 
-    public Player(Scene scene, Vector3f position, Vector3f rotation) {
-	super(scene, position, rotation);
+    public Player(Scene scene, String meshName, Vector3f position, Vector3f rotation) {
+	super(scene, meshName, position, rotation, 1);
 	lookDirection = LookDirection.right;
     }
 
@@ -50,35 +36,55 @@ public class Player extends Character {
 	// up
     }
 
-    public void Attack() {
+    public void attack() {
 
     }
 
-    public void Look(LookDirection direction) {
-	lookDirection = direction;
-	this.getEntity().setRotation(new Vector3f(0, lookDirection.getNumVal(), 0));
+    public void update() {
+
     }
 
-    public void Move() {
+    public void move() {
 
-	
+	/*LookDirection collisionDirection = null;
+	CircleCollider collidingObject = collide();
+
+	if (collidingObject != null) {
+	    collisionDirection = lookDirection;
+
+	} else {
+	    collisionDirection = null;
+	}*/
+
 	if (lookDirection.equals(LookDirection.up)) {
-	    getEntity().Translate(0, 0, -getMoveSpeed());
-	    return;
+	//    if (collisionDirection != lookDirection) {
+		translate(0, 0, -getMoveSpeed());
+	 //   } else if (collisionDirection != null){
+	//	setPosition(position.x, position.y, position.z - (collider.getDistance(collidingObject) - 1));
+	  //  }
+
+	} else if (lookDirection.equals(LookDirection.down)) {
+	 //   if (collisionDirection != lookDirection) {
+		translate(0, 0, getMoveSpeed());
+	 //   } else if (collisionDirection != null){
+	//	setPosition(position.x, position.y, position.z + (collider.getDistance(collidingObject) - 1));
+	  //  }
+	} else if (lookDirection.equals(LookDirection.left)) {
+
+	  //  if (collisionDirection != lookDirection) {
+		translate(-getMoveSpeed(), 0, 0);
+	  //  } else if(collisionDirection != null){
+	//	setPosition(position.x - (collider.getDistance(collidingObject) - 1), position.y, position.z);
+	  //  }
+	} else if (lookDirection.equals(LookDirection.right)) {
+
+	   // if (collisionDirection != lookDirection) {
+		translate(getMoveSpeed(), 0, 0);
+	   // } else if(collisionDirection != null){
+	//	setPosition(position.x + (collider.getDistance(collidingObject) - 1), position.y, position.z);
+	   // }
 	}
-	if (lookDirection.equals(LookDirection.down)) {
-	    getEntity().Translate(0, 0, getMoveSpeed());
-	    return;
-	}
-	if (lookDirection.equals(LookDirection.left)) {
-	    getEntity().Translate(-getMoveSpeed(), 0, 0);
-	    return;
-	}
-	if (lookDirection.equals(LookDirection.right)) {
-	    getEntity().Translate(getMoveSpeed(), 0, 0);
-	    return;
-	}
-	updateCollider();
+
     }
 
 }

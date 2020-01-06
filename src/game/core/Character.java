@@ -1,16 +1,32 @@
 package game.core;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import engine.graphics.Entity;
+import engine.graphics.Mesh;
 import engine.graphics.Scene;
 import engine.math.Mathf;
 import engine.math.Vector3f;
-import engine.utils.Collider;
+import engine.physics.CircleCollider;
 
-public abstract class Character {// :TODO make it an interface or abstract class
+public abstract class Character extends Entity {// :TODO make it an interface or abstract class
 
-    protected Entity entity;
+    public enum LookDirection {
+	up(180), down(0), left(-90), right(90);
+
+	private int numVal;
+
+	LookDirection(int numVal) {
+	    this.numVal = numVal;
+	}
+
+	public int getNumVal() {
+	    return numVal;
+	}
+    }
+
     protected static String meshName;
-
+    protected LookDirection lookDirection;
     protected int maxHealth = 100;// maximum health of character
     protected int health;// health, when its 0, character dies
     protected int attack;// damage output
@@ -20,14 +36,23 @@ public abstract class Character {// :TODO make it an interface or abstract class
     protected float attackCd = 0.5f;// attacks per second
     protected float currentCd;// current cooldown since last attack
     protected int level;// level
-    protected Collider collider;
+    protected CircleCollider collider;
 
     protected Weapon currentWeapon;
 
-    public Character(Scene scene, Vector3f position, Vector3f rotation) {
-	entity = new Entity(scene, meshName, position, rotation, 1f);
-	collider = new Collider(2, entity.getPosition());
-	scene.getGameObjects().add(entity);
+    /*
+     * public Character(Scene scene, Vector3f position, Vector3f rotation) { entity
+     * = new Entity(scene, meshName, position, rotation, 1f);
+     * 
+     * 
+     * }
+     */
+    public Character(Scene scene, String meshName, Vector3f position, Vector3f rotation, float scale) {
+	super(scene, meshName, position, rotation, scale);
+	lookDirection = LookDirection.right;
+	collider = new CircleCollider(1.5f, getPosition());
+	scene.getGameObjects().add(this);
+	scene.getCharacters().add(this);
 	health = maxHealth;
     }
 
@@ -97,25 +122,19 @@ public abstract class Character {// :TODO make it an interface or abstract class
 
     public void takeDamage(int damage) {
 	this.health -= damage;
-	System.out.println("OUCH!");
+	System.out.println("ouchies!");
 	// create damage text beside character showing damage done
 	if (health <= 0) {
 	    die();
-	    System.out.println("i is dead now");
+	    System.out.println("i have died oh no");
 	}
     }
 
-    public Entity getEntity() {
-	return this.entity;
-    }
-
-    protected void setEntity(Entity entity) {
-	this.entity = entity;
-    }
-
     public void die() {
-	// respawn if player?
-
+	scale = 3;
+	translate(0, -3, 0);
+	mesh = new Mesh("Assets/Models/tomb" + ThreadLocalRandom.current().nextInt(1, 3 + 1) + ".obj");
+	look(LookDirection.down);
     }
 
     public void attack(Character enemy) {
@@ -135,17 +154,24 @@ public abstract class Character {// :TODO make it an interface or abstract class
 
     }
 
-    public void checkCollision(Character other) {
-	this.collider.checkCollision(other.collider);
+    public CircleCollider collide() {
+
+	for (Character c : scene.getCharacters()) {
+	    if (!c.equals(this) && this.collider.checkCollision(c.collider) != null) {
+		return c.collider;
+	    }
+
+	}
+	return null;
     }
 
     public float checkDistance(Character other) {
-	return Mathf.Distance(entity.getPosition().x, entity.getPosition().z, other.getEntity().getPosition().x,
-		other.getEntity().getPosition().x);
+	return Mathf.Distance(getPosition().x, getPosition().z, other.getPosition().x, other.getPosition().x);
     }
 
-    protected void updateCollider() {
-	collider.setCenter(entity.getPosition());
+    public void look(LookDirection direction) {
+	lookDirection = direction;
+	this.setRotation(new Vector3f(0, lookDirection.getNumVal(), 0));
     }
 
 }

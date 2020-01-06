@@ -5,14 +5,19 @@ import engine.math.Vector3f;
 
 public class Gjerta extends Player{
 
+    
+
     static {
 	meshName = "knight";
     }
     
-    public Gjerta(Scene scene, Vector3f position, Vector3f rotation) {
+    /*public Gjerta(Scene scene, Vector3f position, Vector3f rotation) {
 	super(scene,position, rotation);
 	
+    }*/
+    public Gjerta(Scene scene, Vector3f position, Vector3f rotation) {
+	super(scene, meshName, position, rotation);
+	// TODO Auto-generated constructor stub
     }
-
 
 }

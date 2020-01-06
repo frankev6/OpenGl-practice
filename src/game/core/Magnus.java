@@ -11,7 +11,7 @@ public class Magnus extends Player {
 
     public Magnus(Scene scene, Vector3f position, Vector3f rotation) {
 
-	super(scene,position, rotation);
+	super(scene,meshName,position, rotation);
     }
 
 }

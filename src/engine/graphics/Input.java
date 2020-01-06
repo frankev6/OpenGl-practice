@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFW;
 
 import engine.math.Mathf;
 import game.core.Player;
-import game.core.Player.LookDirection;
+import game.core.Character.LookDirection;
 
 public class Input {
 
@@ -33,11 +33,11 @@ public class Input {
     }
 
     private void createCallbacks() {
-	
+
 	glfwSetKeyCallback(window.getWindowID(), (window, key, scancode, action, mods) -> {
 	    if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 		this.window.getScene().menu.toggleVisibility();
-	    
+
 	});
 
 	glfwSetMouseButtonCallback(window.getWindowID(), (windowHandle, button, action, mode) -> {
@@ -51,74 +51,73 @@ public class Input {
 	Player player1 = window.getScene().magnus;
 	Player player2 = window.getScene().gjerta;
 
-	distance = Mathf.LinearDistance(player1.getEntity().getPosition().x, player2.getEntity().getPosition().x);
+	distance = Mathf.LinearDistance(player1.getPosition().x, player2.getPosition().x);
 
-	boolean isPlayer1behind = player1.getEntity().getPosition().x < player2.getEntity().getPosition().x ? true
-		: false;
+	boolean isPlayer1behind = player1.getPosition().x < player2.getPosition().x ? true : false;
 
-	// Input for Player1
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_W) == GL_TRUE
-		&& player1.getEntity().getPosition().z > -window.getScene().getWidth() / 2) {
-	    player1.Look(LookDirection.up);
-	    player1.Move();
-	}
-	// && player1.getEntity().getPosition().z > -terrainWidth
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_S) == GL_TRUE
-		&& player1.getEntity().getPosition().z < window.getScene().getWidth() / 2) {
-	    player1.Look(LookDirection.down);
-	    player1.Move();
+	if (player1.getHealth() > 0) {
+	    // Input for Player1
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_W) == GL_TRUE
+		    && player1.getPosition().z > -window.getScene().getWidth() / 2) {
+		player1.look(LookDirection.up);
+		player1.move();
+	    }
+	    // && player1.getPosition().z > -terrainWidth
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_S) == GL_TRUE
+		    && player1.getPosition().z < window.getScene().getWidth() / 2) {
+		player1.look(LookDirection.down);
+		player1.move();
 
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_A) == GL_TRUE
-		&& (isPlayer1behind ? distance + player1.getMoveSpeed()
-			: distance - player1.getMoveSpeed()) < distanceThreshold) {
-	    player1.Look(LookDirection.left);
-	    player1.Move();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_D) == GL_TRUE
-		&& (isPlayer1behind ? distance - player1.getMoveSpeed()
-			: distance + player1.getMoveSpeed()) < distanceThreshold) {
-	    player1.Look(LookDirection.right);
-	    player1.Move();
-	}
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_A) == GL_TRUE
+		    && (isPlayer1behind ? distance + player1.getMoveSpeed()
+			    : distance - player1.getMoveSpeed()) < distanceThreshold) {
+		player1.look(LookDirection.left);
+		player1.move();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_D) == GL_TRUE
+		    && (isPlayer1behind ? distance - player1.getMoveSpeed()
+			    : distance + player1.getMoveSpeed()) < distanceThreshold) {
+		player1.look(LookDirection.right);
+		player1.move();
+	    }
 
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_Q) == GL_TRUE) {
-	    player1.Attack();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_E) == GL_TRUE) {
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_Q) == GL_TRUE) {
+		player1.attack();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_E) == GL_TRUE) {
 
+	    }
 	}
+	if (player2.getHealth() > 0) {
+	    // Input for Player2
+	    if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_UP) == GL_TRUE && player2.getPosition().z > -10) {
+		player2.look(LookDirection.up);
+		player2.move();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_DOWN) == GL_TRUE && player2.getPosition().z < 10) {
+		player2.look(LookDirection.down);
+		player2.move();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_LEFT) == GL_TRUE
+		    && (isPlayer1behind ? distance - player2.getMoveSpeed()
+			    : distance + player2.getMoveSpeed()) < distanceThreshold) {
+		player2.look(LookDirection.left);
+		player2.move();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_RIGHT) == GL_TRUE
+		    && (isPlayer1behind ? distance + player2.getMoveSpeed()
+			    : distance - player2.getMoveSpeed()) < distanceThreshold) {
+		player2.look(LookDirection.right);
+		player2.move();
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_Q) == GL_TRUE) {
 
-	// Input for Player2
-	if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_UP) == GL_TRUE
-		&& player2.getEntity().getPosition().z > -10) {
-	    player2.Look(LookDirection.up);
-	    player2.Move();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_DOWN) == GL_TRUE
-		&& player2.getEntity().getPosition().z < 10) {
-	    player2.Look(LookDirection.down);
-	    player2.Move();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_LEFT) == GL_TRUE
-		&& (isPlayer1behind ? distance - player2.getMoveSpeed()
-			: distance + player2.getMoveSpeed()) < distanceThreshold) {
-	    player2.Look(LookDirection.left);
-	    player2.Move();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW.GLFW_KEY_RIGHT) == GL_TRUE
-		&& (isPlayer1behind ? distance + player2.getMoveSpeed()
-			: distance - player2.getMoveSpeed()) < distanceThreshold) {
-	    player2.Look(LookDirection.right);
-	    player2.Move();
-	}
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_Q) == GL_TRUE) {
+	    }
+	    if (glfwGetKey(window.getWindowID(), GLFW_KEY_E) == GL_TRUE) {
 
+	    }
 	}
-	if (glfwGetKey(window.getWindowID(), GLFW_KEY_E) == GL_TRUE) {
-
-	}
-
     }
 
 }

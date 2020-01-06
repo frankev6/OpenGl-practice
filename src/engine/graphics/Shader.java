@@ -2,6 +2,7 @@ package engine.graphics;
 
 import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_DIFFUSE;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
@@ -45,6 +46,8 @@ public class Shader {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
 	glfwWindowHint(GLFW_SAMPLES, 4);

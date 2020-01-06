@@ -1,17 +1,21 @@
 package engine.graphics;
 
+import java.util.ArrayList;
+
+import engine.math.Mathf;
 import engine.math.Vector3f;
 
-public class Entity {
+public class Entity{
 
-    private Scene scene;
-    private Mesh mesh;
-    private Vector3f position;
-    private Vector3f rotation;
+    protected Scene scene;
+    protected Mesh mesh;
+    protected Vector3f position;
+    protected Vector3f rotation;
+    protected float nearEntityThreshold;
     
-    private float scale;
+    protected float scale;
 
-    private boolean isVisible = true;
+    protected boolean isVisible = true;
 
     public Entity(Scene scene, String meshName, Vector3f position, Vector3f rotation, float scale) {
 	this.mesh = new Mesh("Assets/Models/" + meshName + ".obj");
@@ -45,7 +49,7 @@ public class Entity {
 	this.scale = scale;
     }
 
-    public void Translate(float dx, float dy, float dz) {
+    public void translate(float dx, float dy, float dz) {
 	this.position.x += dx;
 	this.position.y += dy;
 	this.position.z += dz;
@@ -67,6 +71,8 @@ public class Entity {
 
     public void Destroy() {
 
+	scene.getGameObjects().remove(this);
+	
     }
 
     public void setVisibility(boolean visible) {
@@ -80,5 +86,20 @@ public class Entity {
     public Scene getScene() {
         return scene;
     }
-
+    
+    public ArrayList<Entity> getNearEntities() {
+	
+	ArrayList<Entity> nearEntities = new ArrayList<Entity>();
+	
+	for(Entity entity : scene.getGameObjects()) {
+	    if(Mathf.LinearDistance(entity.getPosition().x, this.getPosition().x) < nearEntityThreshold) {
+		nearEntities.add(entity);
+	    }
+	}
+	return nearEntities;
+    }
+    public void update() {
+	
+    }
+    
 }

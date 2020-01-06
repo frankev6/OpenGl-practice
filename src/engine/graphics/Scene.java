@@ -1,7 +1,9 @@
 package engine.graphics;
 
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
@@ -12,11 +14,18 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import java.util.ArrayList;
 
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
+
 import engine.math.Mathf;
 import engine.math.Vector3f;
 import game.core.Enemy;
 import game.core.Gjerta;
+import game.core.KnightEnemy;
 import game.core.Magnus;
+import game.core.Projectile;
+import game.core.ArcherEnemy;
+import game.core.Character;
 
 public class Scene {
 
@@ -26,6 +35,7 @@ public class Scene {
 
     private ArrayList<Entity> GameObjects;
     private ArrayList<Entity> StaticItems;// dont check for collision or move with camera
+    private ArrayList<Character> Characters;
 
     private float length;
     private float width = 20;
@@ -33,10 +43,11 @@ public class Scene {
     ArrayList<Enemy> Enemies;
 
     MenuManager menu;
-    
-    Magnus magnus;
-    Gjerta gjerta;
-    Enemy enemyTest;
+
+    public Magnus magnus;
+    public Gjerta gjerta;
+    KnightEnemy enemyKnight;
+    ArcherEnemy enemyArcher;
     Input input;
     Entity world = new Entity(this, "World", new Vector3f(0, -7, 5), new Vector3f(0, -90, 0), 3);
     Entity sky = new Entity(this, "plane", new Vector3f(0, 270, -500), new Vector3f(90, 180, 0), 50);
@@ -51,14 +62,17 @@ public class Scene {
 	input = new Input(this.window);
 	GameObjects = new ArrayList<Entity>();
 	StaticItems = new ArrayList<Entity>();
+	Characters = new ArrayList<Character>();
 
 	magnus = new Magnus(this, new Vector3f(-2, -3, 0), new Vector3f(0, 0, 0));
 	gjerta = new Gjerta(this, new Vector3f(2, -3, 0), new Vector3f(0, 0, 0));
-	enemyTest = new Enemy(this, new Vector3f(-15, -3, 0), new Vector3f(0, 90, 0));
+	enemyKnight = new KnightEnemy(this, new Vector3f(-15, -3, 0), new Vector3f(0, 90, 0));
+	enemyArcher = new ArcherEnemy(this, new Vector3f(-20, -3, 0), new Vector3f(0, 90, 0));
 
-	magnus.getEntity().getMesh().setTexture(new Texture("Assets/Images/BaseTexture.png"));
-	gjerta.getEntity().getMesh().setTexture(new Texture("Assets/Images/BaseTexture.png"));
-	enemyTest.getEntity().getMesh().setTexture(new Texture("Assets/Images/Dark-Green-Marble.jpg"));
+	magnus.getMesh().setTexture(new Texture("Assets/Images/BaseTexture.png"));
+	gjerta.getMesh().setTexture(new Texture("Assets/Images/BaseTexture.png"));
+	enemyKnight.getMesh().setTexture(new Texture("Assets/Images/Dark-Green-Marble.jpg"));
+	enemyArcher.getMesh().setTexture(new Texture("Assets/Images/Dark-Green-Marble.jpg"));
 	world.getMesh().setTexture(new Texture("Assets/Images/sky.jpeg"));
 	sky.getMesh().setTexture(new Texture("Assets/Images/sky.jpeg"));
 
@@ -73,14 +87,13 @@ public class Scene {
     public void update() {
 
 	Mathf.CalculateDeltaTime();
-	
-	magnus.checkCollision(gjerta);
-	
-	enemyTest.update(magnus, gjerta);
 
+	/*
+	 * if (magnus.checkCollision(gjerta)) { System.out.println("too close buddy");
+	 */
 	input.checkInput();
 
-	cam.move(magnus.getEntity().getPosition(), gjerta.getEntity().getPosition());
+	cam.move(magnus.getPosition(), gjerta.getPosition());
 
 	draw();
 
@@ -88,12 +101,19 @@ public class Scene {
 
     public void draw() {
 
+	glEnable(GL_LIGHTING);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	for (Entity entity : GameObjects) {
+	for (int i = 0; i < GameObjects.size(); i++) {
+
+	    Entity entity = GameObjects.get(i);
 
 	    if (entity.getVisibility()) {
+
+		entity.update();
+
 		glPushMatrix();
 		glTranslatef(entity.getPosition().x - cam.getPosition().x, entity.getPosition().y - cam.getPosition().y,
 			entity.getPosition().z - cam.getPosition().z);
@@ -103,8 +123,11 @@ public class Scene {
 		glScalef(entity.getScale(), entity.getScale(), entity.getScale());
 		entity.getMesh().draw();
 		glPopMatrix();
+
 	    }
 	}
+	GL11.glDisable(GL_LIGHTING);
+
 	for (Entity entity : StaticItems) {
 
 	    if (entity.getVisibility()) {
@@ -133,6 +156,10 @@ public class Scene {
 
     public ArrayList<Entity> getGameObjects() {
 	return GameObjects;
+    }
+
+    public ArrayList<Character> getCharacters() {
+	return Characters;
     }
 
     public ArrayList<Entity> getStaticItems() {

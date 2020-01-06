@@ -16,9 +16,9 @@ public class Camera {
     public void move(Vector3f pos1, Vector3f pos2) {
 	
 	float distance = (pos1.x + pos2.x) / 2.0f;
-	
 	position.z = minDistance+Math.abs(pos1.x - pos2.x);
 	position.x = distance;
+	
     }
 
     public Vector3f getPosition() {

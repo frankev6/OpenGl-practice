@@ -82,18 +82,7 @@ public class Mesh {
 			f.setVertex(i - 1, attrib);
 		    }
 		    faces.add(f);
-		} /*
-		   * else if (lineArray[0].equals("mtllib")) { Scanner mtlibScanner = new
-		   * Scanner(new File("Assets/Models/" + lineArray[1])); while
-		   * (mtlibScanner.hasNextLine()) {
-		   * 
-		   * while (mtlibScanner.hasNextLine()) { String mtlib_line =
-		   * mtlibScanner.nextLine(); String[] mtlib_lineArray = mtlib_line.split(" "); if
-		   * (mtlib_lineArray[0].equals("map_Kd")) { texture = new
-		   * Texture(mtlib_lineArray[1]); } } }
-		   * 
-		   * }
-		   */
+		} 
 	    }
 	    scan.close();
 	} catch (FileNotFoundException e) {
