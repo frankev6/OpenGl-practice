@@ -1,2 +1,1 @@
-# Paris
- 
+# OpenGL practice 
